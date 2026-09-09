@@ -1,0 +1,379 @@
+/* =========================================================
+   OKIS 80th — mobile landing
+   Figma: qWOpQIEysNWBPeEWvcT1Ma / node 775:2509 (모바일, 360w)
+   ========================================================= */
+
+:root{
+  /* Figma variables */
+  --pt1:#0d045f;          /* 포인트1  */
+  --line1:#e1e7f0;        /* 선1      */
+  --ink:#1b1b1b;          /* 금강블랙  */
+  --ink2:#2e2e2e;         /* 금강블랙2 */
+  --ink3:#6b7280;         /* 금강블랙3 */
+  /* raw hex from the design */
+  --brown:#8f6d4f;
+  --brown-dk:#805f41;
+  --cream:#f3eeeb;
+  --name:#231815;
+  /* layout: 360 - 24*2 = 312 content column, identical on every phone */
+  --content:min(312px, 100% - 48px);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box }
+
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+  scroll-snap-type:y proximity;   /* 섹션 경계에서 딱 붙는 스냅 */
+}
+
+body{
+  margin:0;
+  background:#fff;
+  color:var(--ink);
+  font-family:"Noto Sans KR","Apple SD Gothic Neo","Hiragino Kaku Gothic ProN",
+              "Yu Gothic",-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;
+  font-weight:400;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+h2,h3,p,ol,ul,li{ margin:0; padding:0 }
+ol,ul{ list-style:none }
+img{ display:block; max-width:100%; height:auto }
+a{ color:inherit }
+a:focus-visible,.dots a:focus-visible{ outline:2px solid currentColor; outline-offset:3px }
+
+.skip{ position:absolute; left:-9999px }
+.skip:focus{
+  left:8px; top:8px; z-index:60; padding:8px 12px; border-radius:6px;
+  background:#fff; color:#000; font-size:14px;
+}
+
+.page{
+  max-width:480px;
+  margin-inline:auto;
+  position:relative;
+  overflow-x:clip;
+}
+
+.sec{ position:relative; scroll-snap-align:start }
+
+/* ── 페이지 단위 스냅 ────────────────────────────────
+   JS가 각 섹션을 화면 높이에 맞춰 나눈 정지점(.snap-mark)을 심고
+   html.snap-pages 를 붙인다. 섹션 자체는 스냅 대상에서 빼야
+   "화면보다 큰 스냅 영역"이 되어 mandatory가 무력화되는 걸 막는다. */
+html.snap-pages{ scroll-snap-type:y mandatory }
+html.snap-pages .sec{ scroll-snap-align:none }
+.snap-mark{
+  position:absolute; left:0; width:1px; height:1px;
+  opacity:0; pointer-events:none;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;      /* 빠르게 훑어도 한 페이지씩 정지 */
+}
+.wrap{ width:var(--content); margin-inline:auto }
+
+/* ---------- shared: section heading + rule ---------- */
+.head{
+  display:flex; flex-direction:column; align-items:center;
+  gap:12px; padding-bottom:10px;
+  font-size:24px; line-height:32px; font-weight:700;
+  letter-spacing:-.96px; text-align:center; white-space:nowrap;
+  color:#fff;
+}
+.head::after{
+  content:""; display:block; height:4px;
+  width:var(--head-w,120px); max-width:100%;
+  background:currentColor;
+}
+.head-navy{ color:var(--pt1) }
+.head-over{                       /* 밴드 이미지 위에 올라가는 제목 */
+  position:absolute; top:60px; left:50%; transform:translateX(-50%);
+  z-index:2; filter:drop-shadow(0 4px 8px rgba(0,0,0,.3));
+}
+
+.rule{ display:block; height:4px; width:100% }
+.rule-white{ background:#fff }
+.rule-thin{ display:block; height:1px; width:100%; background:rgba(255,255,255,.5) }
+.rule-hair{ display:block; height:1px; width:100%; background:rgba(107,114,128,.2) }
+
+/* =========================================================
+   01 — 표지
+   ========================================================= */
+.sec1{
+  background:linear-gradient(180deg,var(--brown) 0%,var(--brown) 50%,var(--brown-dk) 100%);
+  padding-top:80px;
+  display:flex; flex-direction:column; align-items:center; gap:24px;
+}
+.s1-top{
+  width:min(330px, 100% - 24px);
+  display:flex; flex-direction:column; align-items:center; gap:24px;
+}
+.s1-head{
+  width:100%; display:flex; flex-direction:column; align-items:center;
+  gap:12px; padding-bottom:10px; text-align:center;
+}
+.s1-lines{ display:block }
+.s1-eyebrow{
+  font-size:19.2px; line-height:26px; font-weight:700;
+  letter-spacing:-.768px; color:var(--pt1);
+}
+.s1-title{
+  font-size:min(24px, 7.4vw); line-height:32px; font-weight:700;
+  letter-spacing:-.96px; color:#fff; white-space:nowrap;
+}
+.s1-head .rule-white{ width:min(289px,100%) }
+
+.emblem{ width:180px }
+
+.s1-band{ position:relative; width:100%; aspect-ratio:360/194; overflow:hidden }
+.s1-band-art{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center bottom;
+}
+.s1-years{
+  position:absolute; left:0; right:0; top:58.8%;
+  text-align:center; font-size:24px; line-height:32px; font-weight:700;
+  letter-spacing:1.92px; color:var(--line1);
+}
+
+/* =========================================================
+   02 — 금강학원이 걸어온 길
+   ========================================================= */
+.sec2{ background:#fff; padding-top:60px; padding-bottom:60px; overflow:hidden }
+.s2-photo{ position:absolute; left:0; bottom:0; width:100%; z-index:0 }
+.sec2 > .wrap,
+.sec2 > .timeline{ position:relative; z-index:1 }
+
+.sec2 .head{ margin-bottom:24px }
+.s2-lead{
+  font-size:18px; line-height:26px; font-weight:700; letter-spacing:-.72px;
+  color:var(--brown); text-align:center; margin-bottom:24px;
+}
+.s2-body{
+  font-size:14px; line-height:24px; letter-spacing:-.56px;
+  color:var(--ink); text-align:center;
+}
+
+/* --- timeline --- */
+.timeline{
+  position:relative;
+  width:min(300px, 100% - 24px);
+  margin:24px auto 0;
+  padding-bottom:42px;
+}
+.tl-mark{ width:100%; margin-bottom:28px }
+
+.tl-rail{
+  position:absolute; left:114px; width:8px; top:118px; bottom:0;
+  background:var(--brown);
+  transform:scaleY(0); transform-origin:top center;
+  transition:transform 1.5s var(--ease);
+}
+.timeline.in .tl-rail{ transform:scaleY(1) }
+
+.tl-list{ position:relative; z-index:1; padding-left:44px; display:flex; flex-direction:column; gap:16px }
+.tl-row{
+  display:flex; gap:16px; align-items:flex-start;
+  opacity:0; transform:translateY(10px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease);
+  transition-delay:calc(var(--i,0) * 55ms + 180ms);
+}
+.timeline.in .tl-row{ opacity:1; transform:none }
+
+.tl-date{
+  flex:none; width:54px;
+  display:flex; flex-direction:column; gap:6px; align-items:flex-end;
+  font-size:14px; line-height:16px; font-weight:600;
+  color:var(--brown); text-align:right;
+}
+.tl-dot{
+  flex:none; width:8px; height:8px; margin-top:4px;
+  border-radius:50%; background:#fff; position:relative; z-index:2;
+}
+.tl-text{
+  flex:1; min-width:0;
+  display:flex; flex-direction:column; gap:6px;
+  font-size:14px; line-height:16px; letter-spacing:-.56px; color:var(--ink2);
+}
+
+/* =========================================================
+   03 — 엠블럼 소개 / 교가와 교복
+   ========================================================= */
+.sec3{ background:var(--pt1) }
+.s3-block{ padding:60px 0 }
+.s3-block-b{ padding-top:0 }
+.sec3 .head{ margin-bottom:24px }
+
+.wordmark{ width:min(240px,100%); margin:16px auto 24px }
+
+.s3-body{
+  font-size:14px; line-height:24px; letter-spacing:-.56px;
+  color:#fff; text-align:center;
+}
+.s3-body p + p{ margin-top:24px }
+.s3-body b{ font-weight:600 }
+
+.uniform{ width:min(300px,100%); margin:24px auto 24px }
+
+.s3-foot{ display:flex; flex-direction:column; gap:8px }
+.s3-foot p{
+  font-size:12px; line-height:20px; letter-spacing:-.48px;
+  color:#fff; text-align:center; text-transform:uppercase;
+}
+.s3-foot a{ text-decoration:none }
+.s3-foot a:hover{ text-decoration:underline }
+
+/* =========================================================
+   04 — 이사장 인사말
+   ========================================================= */
+.sec4{ background:var(--brown); padding-top:60px; padding-bottom:0; overflow:hidden }
+.sec4 .head{ margin-bottom:24px }
+.s4-body{
+  display:flex; flex-direction:column; gap:12px;
+  font-size:14px; line-height:24px; letter-spacing:-.56px; color:#fff;
+}
+.s4-foot{
+  position:relative; width:var(--content); margin:24px auto 0;
+  min-height:234px;
+}
+.s4-sign{ position:relative; z-index:2; padding-top:20px }
+.s4-role{ font-size:14px; line-height:20px; color:#fff; opacity:.6 }
+.s4-name{ margin-top:4px; font-size:16px; line-height:32px; font-weight:500; color:#fff }
+.s4-photo{
+  position:absolute; right:-14px; bottom:-26px;
+  width:233px; z-index:1;
+}
+
+/* =========================================================
+   05 — 금강을 지켜온 사람들
+   ========================================================= */
+.sec5{ background:#fff; padding-bottom:60px }
+.band{ position:relative }
+.band > img{ width:100% }
+
+.s5-lead{
+  width:var(--content); margin:32px auto 8px;
+  font-size:14px; line-height:20px; font-weight:700; letter-spacing:-.56px;
+  color:var(--brown); text-align:center;
+}
+
+.people{
+  display:grid; grid-template-columns:repeat(2,132px);
+  gap:8px; justify-content:center;
+}
+.people li{
+  width:132px;
+  opacity:0; transform:translateY(12px);
+  transition:opacity .55s var(--ease), transform .55s var(--ease);
+  transition-delay:calc(var(--i,0) * 50ms);
+}
+.people.in li{ opacity:1; transform:none }
+.people img{ width:132px; height:120px; object-fit:contain }
+.people p{
+  height:28px; display:flex; align-items:baseline; justify-content:center; gap:4px;
+  line-height:1; white-space:nowrap;
+}
+.people b{ font-size:19px; font-weight:700; color:var(--brown) }
+.people span{ font-size:12px; font-weight:700; color:var(--name) }
+
+/* =========================================================
+   06 — 성금 모금 안내
+   ========================================================= */
+.sec6{ background:#fff; padding-bottom:60px }
+.s6-body{
+  width:var(--content); margin:22px auto 24px;
+  font-size:14px; line-height:24px; letter-spacing:-.56px;
+  color:var(--ink); text-align:center;
+}
+
+.give{
+  width:var(--content); margin-inline:auto;
+  background:var(--cream); border-radius:20px;
+  padding:32px 20px;
+  display:flex; flex-direction:column; gap:24px;
+}
+.give-qr{ display:flex; flex-direction:column; align-items:center; gap:16px }
+.qr-box{
+  width:100px; height:100px; flex:none;
+  background:#fff; border:4px solid var(--brown); border-radius:4px;
+  display:grid; place-items:center; overflow:hidden;
+}
+.qr-box img{ width:86px; height:86px }
+.qr-cap{
+  font-size:14px; line-height:20px; font-weight:700; letter-spacing:-.56px;
+  color:var(--brown); text-align:center;
+}
+.give-btn{                        /* Figma 775:5821 — 272×40 pill */
+  display:flex; align-items:center; justify-content:center;
+  width:100%; height:40px; border-radius:40px;
+  background:var(--brown); color:#fff;
+  font-size:14px; line-height:20px; font-weight:700; letter-spacing:-.56px;
+  text-align:center; white-space:nowrap; text-decoration:none;
+  box-shadow:0 4px 8px rgba(0,0,0,.08);
+  -webkit-tap-highlight-color:transparent;
+  transition:background .2s var(--ease), transform .12s var(--ease);
+}
+.give-btn:hover{ background:#7d5e43 }
+.give-btn:active{ transform:translateY(1px); box-shadow:0 2px 4px rgba(0,0,0,.08) }
+
+.give-group{ display:flex; flex-direction:column; gap:12px }
+.give-group h3{
+  font-size:18px; line-height:26px; font-weight:700; letter-spacing:-.72px;
+  color:var(--brown);
+}
+.give-lines{ display:flex; flex-direction:column; gap:8px }
+.give-lines p{
+  font-size:14px; line-height:24px; font-weight:500; letter-spacing:-.56px;
+  color:var(--ink);
+}
+.give-lines b{ font-weight:700 }
+.give-lines a{ text-decoration:none }
+.give-lines a:hover{ text-decoration:underline }
+.ind{ padding-left:58px }
+.ind-48{ padding-left:48px }
+.kana{ letter-spacing:-1.12px; word-break:normal }
+.note{
+  font-size:12px !important; line-height:18px !important;
+  font-weight:400 !important; letter-spacing:-.48px !important;
+  color:var(--ink3) !important;
+  padding-left:8px; text-indent:-8px;   /* 내어쓰기 */
+}
+.note + .note{ margin-top:-4px }
+
+/* =========================================================
+   섹션 인디케이터
+   ========================================================= */
+.dots{
+  position:fixed; right:8px; top:50%; transform:translateY(-50%);
+  z-index:40; display:flex; flex-direction:column; gap:6px;
+}
+.dots a{ width:22px; height:22px; display:grid; place-items:center; -webkit-tap-highlight-color:transparent }
+.dots span{
+  width:7px; height:7px; border-radius:50%;
+  background:rgba(27,27,27,.22);
+  transition:background .25s var(--ease), transform .25s var(--ease);
+}
+.dots a[aria-current="true"] span{ background:var(--brown); transform:scale(1.55) }
+.dots.on-dark span{ background:rgba(255,255,255,.32) }
+.dots.on-dark a[aria-current="true"] span{ background:#fff }
+
+/* =========================================================
+   데스크톱 / 접근성
+   ========================================================= */
+@media (min-width:481px){
+  body{ background:#efe9e3 }
+  .page{ box-shadow:0 0 40px rgba(0,0,0,.09) }
+  .dots{ right:max(8px, calc(50vw - 268px)) }
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; scroll-snap-type:none }
+  html.snap-pages{ scroll-snap-type:none }
+  *{ transition:none !important; animation:none !important }
+  .tl-rail{ transform:scaleY(1) !important }
+  .tl-row,.people li{ opacity:1 !important; transform:none !important }
+}
