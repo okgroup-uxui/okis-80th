@@ -15,8 +15,12 @@
   /* ---- reveal: 연혁 레일 + 행, 역대 이사장 그리드 ---- */
   var reveals = document.querySelectorAll('[data-timeline], [data-people]');
 
+  function revealAll() {
+    Array.prototype.forEach.call(reveals, function (el) { el.classList.add('in'); });
+  }
+
   if (reduce || !('IntersectionObserver' in window)) {
-    reveals.forEach(function (el) { el.classList.add('in'); });
+    revealAll();
   } else {
     var revealObs = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -27,7 +31,33 @@
       });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.06 });
 
-    reveals.forEach(function (el) { revealObs.observe(el); });
+    Array.prototype.forEach.call(reveals, function (el) { revealObs.observe(el); });
+
+    /* 백업: 옵저버가 어떤 이유로든 발동하지 않았을 때 스크롤로 직접 확인.
+       화면에 3분의 1 이상 들어왔는데 .in 이 없으면 붙인다. */
+    var backupTimer;
+    function backupCheck() {
+      var vh = window.innerHeight || 0;
+      var pending = 0;
+      Array.prototype.forEach.call(reveals, function (el) {
+        if (el.classList.contains('in')) return;
+        pending++;
+        var r = el.getBoundingClientRect();
+        var shown = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+        if (shown > Math.min(r.height, vh) / 3) el.classList.add('in');
+      });
+      if (!pending) {
+        window.removeEventListener('scroll', onScrollBackup);
+        window.removeEventListener('touchmove', onScrollBackup);
+      }
+    }
+    function onScrollBackup() {
+      if (backupTimer) return;
+      backupTimer = setTimeout(function () { backupTimer = null; backupCheck(); }, 150);
+    }
+    window.addEventListener('scroll', onScrollBackup, { passive: true });
+    window.addEventListener('touchmove', onScrollBackup, { passive: true });
+    setTimeout(backupCheck, 1200);
   }
 
   /* ---- 섹션 인디케이터 ---- */
@@ -92,7 +122,7 @@
     marks = [];
     root.classList.remove('snap-pages');
 
-    if (reduce || !page) return;
+    if (!page) return;
 
     var vh = window.innerHeight;
     if (!vh) return;

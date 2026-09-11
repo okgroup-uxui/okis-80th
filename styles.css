@@ -330,19 +330,24 @@ html.snap-pages .sec{ scroll-snap-align:none }
   font-size:14px; line-height:24px; font-weight:500; letter-spacing:-.56px;
   color:var(--ink);
 }
-.give-lines b{ font-weight:700 }
+.give-lines b,
+.give-lines .all-bold{ font-weight:700 }
 .give-lines a{ text-decoration:none }
 .give-lines a:hover{ text-decoration:underline }
-.ind{ padding-left:58px }
-.ind-48{ padding-left:48px }
+
+/* 라벨 줄과 이어지는 들여쓴 줄은 한 덩어리로 붙인다 (사이 간격 0) */
+.give-sub{ display:flex; flex-direction:column }
+.ind-50{ padding-left:50px }
+.ind-58{ padding-left:58px }
+.ind-60{ padding-left:60px }
 .kana{ letter-spacing:-1.12px; word-break:normal }
-.note{
-  font-size:12px !important; line-height:18px !important;
-  font-weight:400 !important; letter-spacing:-.48px !important;
-  color:var(--ink3) !important;
+
+.note{ display:flex; flex-direction:column }
+.note p{
+  font-size:12px; line-height:18px; font-weight:400; letter-spacing:-.48px;
+  color:var(--ink3);
   padding-left:8px; text-indent:-8px;   /* 내어쓰기 */
 }
-.note + .note{ margin-top:-4px }
 
 /* =========================================================
    섹션 인디케이터
@@ -371,9 +376,10 @@ html.snap-pages .sec{ scroll-snap-align:none }
 }
 
 @media (prefers-reduced-motion:reduce){
-  html{ scroll-behavior:auto; scroll-snap-type:none }
-  html.snap-pages{ scroll-snap-type:none }
-  *{ transition:none !important; animation:none !important }
+  /* 부드러운 스크롤과 장식용 등장 모션만 끈다.
+     페이지 단위 정지는 이동 방식(즉시 이동)만 바꿔 그대로 유지한다. */
+  html{ scroll-behavior:auto }
+  .tl-row,.people li,.give-btn,.tl-rail,.dots span{ transition:none !important }
   .tl-rail{ transform:scaleY(1) !important }
   .tl-row,.people li{ opacity:1 !important; transform:none !important }
 }
